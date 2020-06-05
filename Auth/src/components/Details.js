@@ -16,31 +16,35 @@ class Details extends React.Component {
             responders: [],
             ip: ''
         }
-    }
-    componentDidMount() {
-        //console.log(firebase.auth().currentUser)
+     }
+      componentDidMount() {
+          //console.log(firebase.auth().currentUser)
 
-        console.log("i am here")
+          console.log("i am here")
 
-        firebase.database().ref().on("value", (snapshot) => {
-            this.setState({ responders: snapshot.val().responses })
-            console.log(snapshot.val().responses, "response generated");
-        })
+          firebase.database().ref().on("value", (snapshot) => {
+              this.setState({ responders: snapshot.val().responses })
+              console.log(snapshot.val().responses, "response generated");
+          })
 
-        this.setState({ uid: firebase.auth().currentUser.uid })
-    }
+          this.setState({ uid: firebase.auth().currentUser.uid })
+      }
 
-    componentDidUpdate() {
-        // setTimeout(() => {
-        //     console.log(this.state.ip)
+     componentDidUpdate() {
+          setTimeout(() => {
+              //console.log(this.state.ip,"oooooooooooooooooooooooooooooooooooooooooooooooooooooo")
 
-        //     firebase.database().ref().on("value", (snapshot) => {
-        //         this.setState({ responders: snapshot.val().responses })
-        //     })
+              firebase.database().ref().on("value", (snapshot) => {
+                  
+                this.setState({ responders: snapshot.val().responses })
+                  //console.log(snapshot.val().responses, "response generated");
+              })
+              this.setState({ uid: firebase.auth().currentUser.uid })
 
-        // }, 4000)
+          }, 5000)
 
-    }
+     }
+
     alertDone = (name, type, longitude, latitude, id) => {
         var date = new Date().getDate()
         var month = new Date().getMonth() + 1
