@@ -14,7 +14,8 @@ class Details extends React.Component {
         this.state = {
             done: 1, uid: '',
             responders: [],
-            ip: ''
+            ip: '',
+            
         }
      }
       componentDidMount() {
@@ -24,26 +25,28 @@ class Details extends React.Component {
 
           firebase.database().ref().on("value", (snapshot) => {
               this.setState({ responders: snapshot.val().responses })
-              console.log(snapshot.val().responses, "response generated");
+              this.setState({ip: snapshot.val().ip_cameras})
+              console.log(snapshot.val().ip_cameras.IP, "response generated");
+              console.log(this.state.ip)
           })
 
           this.setState({ uid: firebase.auth().currentUser.uid })
       }
 
-     componentDidUpdate() {
-          setTimeout(() => {
-              //console.log(this.state.ip,"oooooooooooooooooooooooooooooooooooooooooooooooooooooo")
+      componentDidUpdate() {
+           setTimeout(() => {
+               //console.log(this.state.ip,"oooooooooooooooooooooooooooooooooooooooooooooooooooooo")
 
-              firebase.database().ref().on("value", (snapshot) => {
+               firebase.database().ref().on("value", (snapshot) => {
                   
-                this.setState({ responders: snapshot.val().responses })
-                  //console.log(snapshot.val().responses, "response generated");
-              })
-              this.setState({ uid: firebase.auth().currentUser.uid })
+                this.setState({ip: snapshot.val().ip_cameras})
+                console.log(snapshot.val().ip_cameras, "response generated");
+               })
+               //this.setState({ uid: firebase.auth().currentUser.uid })
 
-          }, 5000)
-
-     }
+           }, 4002)
+            console.log(this.state.ip.IP,"Component updated")
+      }
 
     alertDone = (name, type, longitude, latitude, id) => {
         var date = new Date().getDate()
@@ -104,24 +107,23 @@ class Details extends React.Component {
     render() {
         const { name, type, image, longitude, latitude, id } = this.props.navigation.state.params;
 
-        const driver = Object.keys(this.state.responders).map((key) => this.state.responders[key]);
+         //const driver = Object.keys(this.state.ip).map(() => this.state.ip);
 
-        driver.map((index1) => {
-            const index_1 = Object.keys(index1).map((key) => index1[key]);
-            // console.log("Itteration 1")
-            index_1.map((index2) => {
-                //   console.log("Itteration 2")
-                const index_2 = Object.keys(index2).map((key) => index2[key]);
-                index_2.map(index3 => {
-                    setTimeout(() => {
-                        this.setState({ ip: index3.IP })
-                        console.log(this.state.ip)
+        //  driver.map((index2) => {
+        // //         const index_2 = Object.keys(index2).map((key) => index2);
+        // //         index_2.map(index3 => {
+        //              setTimeout(() => {
+        //                  this.setState({ ip: index2.IP })
+                          //console.log(this.state.ip)
+                          //console.log(this.state.ip)
+                          //console.log(this.state.ip)
+                          //console.log(this.state.ip)
 
-                    }, 4000)
-                })
-            })
+        //              }, 4000)
+        //          })
+        // //     })
 
-        })
+        
         return (
             <ScrollView>
                 <Text style={{ fontSize: 20, padding: 0, margin: 0 }}> Image Received From Sender </Text>
@@ -133,17 +135,20 @@ class Details extends React.Component {
                 <Text style={{ marginLeft: 25, fontSize: 20 }}>{type}</Text>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
                     {/* <Image source ={require('../../image/image.jpg')}  style={{width:500,height:250}}/> */}
+                {console.log(this.state.ip.IP,"Before node player")}
                     <NodePlayerView
-
+                        
                         style={{ height: 310, width: 1000 }}
                         ref={(vp) => { this.vp = vp }}
-                        inputUrl={this.state.ip}
+                        inputUrl={this.state.ip.IP}
                         scaleMode={"ScaleAspectFit"}
                         bufferTime={300}
                         maxBufferTime={1000}
                         Muted
                         autoplay={true}
                     />
+                {console.log(this.state.ip.IP,"After node player")}
+                
                     {/* <Image source ={require('../../image/image1.jpg')} 
       style={{width:500,height:250}}/> */}
                 </View>
@@ -152,7 +157,7 @@ class Details extends React.Component {
                         type="solid"
                         title="Respond"
                         buttonStyle={{ marginTop: 50, borderRadius: 20, width: 300, marginLeft: 300 }}
-                        onPress={this.alertDone.bind(this, name, type, longitude, latitude, id)}
+                        onPress={this.alertDone.bind(this, name, type, longitude, latitude, id,this.state.IP)}
                     />
                 </TouchableOpacity>
             </ScrollView>
